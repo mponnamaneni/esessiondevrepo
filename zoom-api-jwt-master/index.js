@@ -30,7 +30,7 @@ app.post('/userinfo', (req, res) => {
   //Store the options for Zoom API which will be used to make an API call later.
   var options = {
     //You can use a different uri if you're making an API call to a different Zoom endpoint.
-    uri: "https://api.zoom.us/v2/users/"+email, 
+    uri: "https://api.zoom.us/v2/users/"+email+"/recordings", 
     qs: {
         status: 'active' 
     },
@@ -44,13 +44,30 @@ app.post('/userinfo', (req, res) => {
     json: true //Parse the JSON string in the response
 };
 
+//TODO Implement validation and sanitize inputs
+exports.logger = (webhookEvent) => {
+    console.log('Logging new webhook event...');
+    console.log('Here is the request body received:');
+    console.log(req.body);
+    return true;
+};
+
+exports.generic = (req, res) => {
+    console.log('Event Received: ', req.body['event']);
+    res.status(200).end();
+};
+exports.deauthorization = (req, res) => {
+    console.log('Deauthorization Event Received');
+    res.status(200).end();
+
+
 //Use request-promise module's .then() method to make request calls.
 rp(options)
     .then(function (response) {
       //printing the response on the console
         console.log('User has', response);
         //console.log(typeof response);
-        resp = response
+        resp = req.body
         //Adding html to the page
         var title1 ='<center><h3>Your token: </h3></center>' 
         var result1 = title1 + '<code><pre style="background-color:#aef8f9;">' + token + '</pre></code>';

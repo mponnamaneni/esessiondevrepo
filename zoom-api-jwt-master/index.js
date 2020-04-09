@@ -59,7 +59,7 @@ exports.generic = (req, res) => {
 exports.deauthorization = (req, res) => {
     console.log('Deauthorization Event Received');
     res.status(200).end();
-
+};
 
 //Use request-promise module's .then() method to make request calls.
 rp(options)
